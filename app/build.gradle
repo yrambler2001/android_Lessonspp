@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    compileSdkVersion 27
+    buildToolsVersion '28.0.2'
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId 'yrambler2001.lessonspp'
         minSdkVersion 19
-        targetSdkVersion 19
+        targetSdkVersion 27
         versionCode 5
         versionName '5.1.0 by yrambler2001'
     }
@@ -20,13 +20,18 @@ android {
     productFlavors {
     }
 }
+def deleteSomeDependencies = {
+    exclude group: "com.android.support", module: "support-annotations"
+    exclude group: "com.android.support", module: "support-core-utils"
+    exclude group: "com.android.support", module: "support-compat"
+}
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'net.danlew:android.joda:2.8.2'
-    compile 'com.android.support:support-v13:19.+'
-    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-    compile 'com.github.lzyzsd:circleprogress:1.2.1'
-    compile 'me.zhanghai.android.materialprogressbar:library:1.4.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'net.danlew:android.joda:2.8.2'
+    implementation 'com.android.support:support-v13:27.1.1',deleteSomeDependencies
+    implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.2'
 
 }
