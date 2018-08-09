@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:weightSum="9">
+
+    <RelativeLayout
+        android:layout_width="55dp"
+        android:layout_height="match_parent">
+
+        <com.github.lzyzsd.circleprogress.DonutProgress
+
+            android:id="@+id/donut_progress"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            app:donut_circle_starting_degree="0"
+            app:donut_finished_color="@color/dnt_finished_color_lesson"
+            app:donut_finished_stroke_width="6dp"
+            app:donut_max="4000"
+            app:donut_show_text="false"
+            app:donut_unfinished_color="#44ffffff"
+            app:donut_unfinished_stroke_width="6dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="#FF000000"
+            android:textSize="30sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="123"
+            android:textColor="#FF000000"
+            android:textSize="25sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:singleLine="false"
+            android:text="456"
+            android:textColor="#FF000000"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</LinearLayout>

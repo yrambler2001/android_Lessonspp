@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:measureAllChildren="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/lv_lesson"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="7.8"
+        android:choiceMode="none"
+        android:clipChildren="false"
+        android:divider="#00000000"
+        android:dividerHeight="3dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" />
+
+</FrameLayout>

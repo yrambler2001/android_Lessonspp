@@ -1,0 +1,81 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:measureAllChildren="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00D9D9D9"
+        android:orientation="vertical"
+        android:weightSum="8.8"
+        tools:context=".MainActivity">
+
+
+        <TextView
+            android:id="@+id/tv_lesson"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#00c0c0c0"
+            android:gravity="center"
+            android:text="err"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#000000"
+            android:textSize="40dp" />
+
+        <ListView
+            android:id="@+id/lv_lesson"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:choiceMode="none"
+            android:clipChildren="false"
+            android:divider="#00000000"
+            android:dividerHeight="3dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_weight="7.8"/>
+        <!-- android:layout_weight="7.2" -->
+
+<!--
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
+
+            android:padding="3dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp">
+
+            <ProgressBar
+                android:id="@+id/pb_time"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:indeterminate="false" />
+
+            <TextView
+                android:id="@+id/tv_length"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:text="err"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:textColor="#000000" />
+
+        </RelativeLayout>
+-->
+    </LinearLayout>
+
+</FrameLayout>

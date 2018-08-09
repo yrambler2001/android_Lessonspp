@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <color name="dnt_finished_color_lesson">#ffff8800</color>
+    <color name="dnt_finished_color_break">#ff3D8FF4</color>
+
+</resources>
