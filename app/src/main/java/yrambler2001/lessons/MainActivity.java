@@ -1,5 +1,6 @@
 package yrambler2001.lessons;
 
+import android.app.ActionBar;
 import android.app.Activity;
 
 import android.content.Context;
@@ -40,6 +41,7 @@ public class MainActivity extends Activity {
             public void run() {
                 Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                 Log.i("YUP", msg);
+
             }
         });
     }
@@ -49,7 +51,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         JodaTimeAndroid.init(this);
-
         ViewPager vpPager = findViewById(R.id.vpPager);
         vpPager.setAdapter(new PagerAdapter(getFragmentManager()));
 

@@ -34,6 +34,8 @@ public class DownloadLessonsTask extends AsyncTask<Void, Void, JSONArray>
 
 	protected JSONArray doInBackground(Void... v)
 	{
+		TableGetter.init();
+
 		StringBuilder builder = new StringBuilder();
 		HttpClient client = new DefaultHttpClient();
 		HttpGet httpGet = new HttpGet("http://yrambler2001.narod.ru/yrambler2001/LessonsPlus/Lessons.json");
