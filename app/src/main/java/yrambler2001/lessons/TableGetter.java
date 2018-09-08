@@ -9,9 +9,14 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class TableGetter {
 
@@ -35,79 +40,99 @@ public class TableGetter {
             Elements linesInTable = script.getElementsByTag("table").first().getElementsByTag("tr");
             //int linesIn1Line = Integer.parseInt(linesInTable.get(0).getElementsByClass("LessonNumber").first().attr("rowspan"));
             //String period1 = linesInTable.get(0).getElementsByClass("LessonPeriod").first().text();
-            List<Dictionary> a = new ArrayList<>();
             String[] sHeader = new String[20];
             int[] iHeader = new int[20];
-            String[][] aa = new String[20][20];
+            String[][][] sLesson = new String[20][20][3];
             int q;
             Elements headr = linesInTable.get(0).getElementsByTag("th");
             int k = 0;
 
             for (int h = 0; h < headr.size(); h++) {
                 Element curel = headr.get(h);
-                if (curel.hasAttr("colspan")) {
-                    iHeader[k] = 2;
-                    sHeader[k] = curel.text();
-                    k++;
-                    iHeader[k] = 2;
-                    sHeader[k] = curel.text();
-                } else {
-                    iHeader[k] = 1;
-                    sHeader[k] = curel.text();
-                    k++;
-                    iHeader[k] = 1;
-                    sHeader[k] = curel.text();
-                }
+                int a = curel.hasAttr("colspan") ? 2 : 1;
+                iHeader[k] = a;
+                sHeader[k] = curel.text();
+                k++;
+                iHeader[k] = a;
+                sHeader[k] = curel.text();
                 k++;
             }
-            for (int v = 0; v < linesInTable.size(); v++) {
-                //if (linesInTable.get(v).getElementsByTag())
-                Elements fline = linesInTable.get(v).getElementsByTag("td");
-
-                int iSpHor=0;
-
+            int v = 0;
+            for (int z = 0; z < linesInTable.size(); z++) {
+                boolean b = false;
+                Elements fline = linesInTable.get(z).getElementsByTag("td");
                 for (int h = 0; h < fline.size(); h++) {
-                    q = h;
                     Element e = fline.get(h);
                     Element ee = e.getElementsByTag("div").first();
-                    String s = "--";
-                    if (ee != null) s = ee.text();
-                    for (q = 0; q < aa.length; q++)
-                        if (aa[v][q] == null) {
-                            aa[v][q] = s;
-
+                    if (e.html().contains("LessonPeriod") && (!e.hasAttr("rowspan"))) {
+                        b = true;
+                    }
+                    String[] s = new String[]{"--", "--", "--"};
+                    if (ee != null) s[0] = ee.text();
+                    for (q = 0; q < sLesson.length; q++)
+                        if (sLesson[v][q][0] == null) {
+                            sLesson[v][q] = s;
+                            Elements eInfo = e.getElementsByClass("info");
+                            if (eInfo.size() > 0) {
+                                String[] sInfo = eInfo.first().html().split("<br>");
+                                if (sInfo.length == 2) {
+                                    s[1] = sInfo[0].substring(0, sInfo[0].indexOf('\n'));
+                                    s[2] = sInfo[1].substring(sInfo[1].lastIndexOf('>') + 1).replaceFirst(" ", "");
+                                }
+                            }
                             if (iHeader[q] == 2) {
                                 if (e.hasAttr("rowspan"))//вниз
-                                    aa[v + 1][q] = s;
+                                    sLesson[v + 1][q] = s;
                                 if (e.hasAttr("colspan"))//вбік
-                                    aa[v][q + 1] = s;
+                                    sLesson[v][q + 1] = s;
                                 if (e.hasAttr("colspan") && e.hasAttr("rowspan"))
-                                    aa[v + 1][q + 1] = s;
-                                iSpHor+=2;
-                            }
-                            else if (iHeader[q] == 1) {
-                                aa[v][q + 1] = s;
+                                    sLesson[v + 1][q + 1] = s;
+                            } else if (iHeader[q] == 1) {
+                                sLesson[v][q + 1] = s;
                                 if (e.hasAttr("rowspan")) {
-                                    aa[v + 1][q] = s;
-                                    aa[v + 1][q + 1] = s;
+                                    sLesson[v + 1][q] = s;
+                                    sLesson[v + 1][q + 1] = s;
                                 }
-
-                                aa[v][q + 1] = s;
-                                iSpHor+=1;
-
                             }
                             break;
                         }
+
                     Log.i("tbl", "OK h " + h);
+                }
+                if (b) {
+                    sLesson[v + 1] = sLesson[v];
+                    v++;
                 }
                 Log.i("tbl", "OK v " + v);
 
+                v++;
             }
 
 
-            int aaa = 0;
+            List<List<Map<String, String>>> firstGroup= new ArrayList<>(), secondGroup = new ArrayList<>();
 
-        } catch (IOException e) {
+            for (int i = 0; i < sLesson.length; i++) {
+                List<Map<String, String>> f=new ArrayList<>(),s=new ArrayList<>();
+                for (int j = 0; j < sLesson[0].length; j++)
+                    if (sLesson[j][i][0] != null) {
+                        Log.i("AA", j + " " + sLesson[j][i][0]);
+                        HashMap<String, String> hm = new HashMap<>();
+                        hm.put("lesson",sLesson[j][i][0]);
+                        hm.put("type",sLesson[j][i][1]);
+                        hm.put("cabinet",sLesson[j][i][2]);
+                        if (i%2==0) f.add(hm); else s.add(hm);
+                    }
+                if (f.size()>0)firstGroup.add(f);
+                if (s.size()>0)secondGroup.add(s);
+                Log.i("AA", i + "----");
+            }
+            MainActivity.firstGroup=firstGroup; MainActivity.secondGroup=secondGroup;
+
+
+        } catch (
+                IOException e)
+
+        {
             e.printStackTrace();
         }
     }

@@ -20,6 +20,10 @@ import org.json.JSONArray;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class MainActivity extends Activity {
@@ -27,6 +31,8 @@ public class MainActivity extends Activity {
 
 
     static JSONArray ja = new JSONArray();
+    static List<List<Map<String, String>>> firstGroup= new ArrayList<>(), secondGroup = new ArrayList<>();
+
     static String days[]=new String[]{"Вчителі","Понеділок","Вівторок","Середа","Четвер","П'ятниця","Субота","Неділя"};
     public static String intToDay(int day) {
         return days[day-1];

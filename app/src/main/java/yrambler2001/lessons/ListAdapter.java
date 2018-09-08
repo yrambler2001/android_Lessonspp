@@ -15,6 +15,10 @@ import org.json.JSONObject;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by Юра on 14.12.2015.
  */
@@ -27,7 +31,8 @@ public class ListAdapter extends BaseAdapter {
     private boolean special = true;
     private boolean isbreak = false;
 
-    JSONArray arr;
+    //JSONArray arr;
+    List<Map<String, String>> list;
 
 
     public ListAdapter(Context context) {
@@ -36,13 +41,13 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return (arr == null) ? 0 : arr.length();
+        return (list == null) ? 0 : list.size() / 2;
     }
 
     @Override
     public Object getItem(int position) {
         try {
-            return arr.get(position);
+            return list.get(position * 2);
         } catch (Exception e) {
             return null;
         }
@@ -53,8 +58,8 @@ public class ListAdapter extends BaseAdapter {
         return position;
     }
 
-    public void update(JSONArray arrNew) {
-        arr = arrNew;
+    public void update(List<Map<String, String>> lNew) {
+        list = lNew;
     }
 
     public void setNow(int now) {
@@ -65,9 +70,13 @@ public class ListAdapter extends BaseAdapter {
         this.isbreak = isbreak;
     }
 
-    public void setProgress(int progress) {this.progress = progress;}
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
 
-    public void setCountdown(int countdown) {this.countdown = countdown;}
+    public void setCountdown(int countdown) {
+        this.countdown = countdown;
+    }
 
     public void setSpecial(boolean special) {
         this.special = special;
@@ -85,8 +94,9 @@ public class ListAdapter extends BaseAdapter {
                     R.layout.list_item, null);
         } else lay = (LinearLayout) convertView;
 
-        TextView text1 = ((TextView) ((LinearLayout) lay.getChildAt(2)).getChildAt(0));
-        TextView text2 = ((TextView) ((LinearLayout) lay.getChildAt(2)).getChildAt(1));
+        TextView text1 = ((TextView) ((LinearLayout) lay.getChildAt(2)).findViewById(R.id.upper));//.getChildAt(0));
+        TextView text2 = ((TextView) ((LinearLayout) lay.getChildAt(2)).findViewById(R.id.bottom_left));
+        TextView text3 = ((TextView) ((LinearLayout) lay.getChildAt(2)).findViewById(R.id.bottom_right));//.getChildAt(1));
         TextView num = ((TextView) ((RelativeLayout) lay.getChildAt(0)).getChildAt(1));
         DonutProgress pb = ((DonutProgress) ((RelativeLayout) lay.getChildAt(0)).getChildAt(0));
 
@@ -97,9 +107,10 @@ public class ListAdapter extends BaseAdapter {
         if ((progress - pg) <= 0) {
             pb.setProgress(0);
         } else if ((progress - pg) < 4000) {
-            if (isbreak) pb.setFinishedStrokeColor(context.getResources().getColor(R.color.dnt_finished_color_break));
+            if (isbreak)
+                pb.setFinishedStrokeColor(context.getResources().getColor(R.color.dnt_finished_color_break));
             pb.setProgress(progress - pg);
-            num.setText(countdown+"хв");
+            num.setText(countdown + "хв");
             num.setTextSize(14);
         } else {
             pb.setProgress(4000);
@@ -111,14 +122,23 @@ public class ListAdapter extends BaseAdapter {
 
         try {
 
-            Object jn = arr.get(position);
-            if (jn instanceof JSONArray) {
-                text1.setText(((JSONArray) jn).getJSONObject(special ? 1 : 0).getString("Lesson"));
-                text2.setText(((JSONArray) jn).getJSONObject(special ? 1 : 0).getString("Cabinet"));
-            } else {
-                text1.setText(((JSONObject) jn).getString("Lesson"));
-                text2.setText(((JSONObject) jn).getString("Cabinet"));
-            }
+//            Object jn = list.get(position);
+//            if (jn instanceof JSONArray) {
+//                text1.setText(((JSONArray) jn).getJSONObject(special ? 1 : 0).getString("Lesson"));
+//                text2.setText(((JSONArray) jn).getJSONObject(special ? 1 : 0).getString("Cabinet"));
+//            } else {
+//                text1.setText(((JSONObject) jn).getString("Lesson"));
+//                text2.setText(((JSONObject) jn).getString("Cabinet"));
+//            }
+            Map<String, String> hm = list.get(position * 2);
+//            if (jn instanceof JSONArray) {
+//                text1.setText(((JSONArray) jn).getJSONObject(special ? 1 : 0).getString("Lesson"));
+//                text2.setText(((JSONArray) jn).getJSONObject(special ? 1 : 0).getString("Cabinet"));
+//            } else {
+            text1.setText(hm.get("lesson"));
+            text2.setText(hm.get("type"));
+            text3.setText(hm.get("cabinet"));
+            //}
 
         } catch (Exception e) {
             e.printStackTrace();
