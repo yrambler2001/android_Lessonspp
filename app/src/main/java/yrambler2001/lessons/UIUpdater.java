@@ -6,13 +6,13 @@ import android.os.Looper;
 
 public class UIUpdater {
     // Create a Handler that uses the Main Looper to run in
-    public Handler mHandler = new Handler(Looper.getMainLooper());
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public Runnable mStatusChecker;
+    private Runnable mStatusChecker;
     private int UPDATE_INTERVAL = 1000;
-    Runnable runnable;
+    private Runnable runnable;
 
-    public UIUpdater() {
+    UIUpdater() {
         mStatusChecker = new Runnable() {
             @Override
             public void run() {
@@ -22,11 +22,11 @@ public class UIUpdater {
         };
     }
 
-    public synchronized void startUpdates() {
+    synchronized void startUpdates() {
         mStatusChecker.run();
     }
 
-    public UIUpdater setRunnable(final Runnable runnable) {
+    UIUpdater setRunnable(final Runnable runnable) {
         this.runnable = runnable;
         return this;
     }

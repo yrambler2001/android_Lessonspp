@@ -3,53 +3,14 @@
 
 
     <string name="action_settings">Settings</string>
-    <string-array name="Monday">
-        <item>Спортзал_Фізкультура</item>
-        <item>28 Кабінет_Алгебра</item>
-        <item>28 Кабінет_Біологія</item>
-        <item>19 Кабінет_Хімія</item>
-        <item>28 Кабінет_Українська література</item>
-        <item>28 Кабінет_Українська мова</item>
-        <item>28 Кабінет_Історія України</item>
-    </string-array>
-    <string-array name="Tuesday">
-        <item>35 Кабінет_Географія</item>
-        <item>Майстерня_Трудове навчання</item>
-        <item>28 Кабінет_Фізика</item>
-        <item>19 Кабінет_Англійська</item>
-        <item>27 Кабінет_Німецька</item>
-        <item>13 Кабінет_Інформатика</item>
-        <item>Спортзал_Фізкультура</item>
-    </string-array>
-    <string-array name="Wednesday">
-        <item>28 Кабінет_Геометрія</item>
-        <item>35 Кабінет_Біологія</item>
-        <item>28 Кабінет_Біологія</item>
-        <item>28 Кабінет_Українська література</item>
-        <item>19 Кабінет_Хімія</item>
-        <item>28 Кабінет_Всесвітня історія</item>
-        <item>28/19 Кабінет_Історія України/Основи здоровя</item>
-    </string-array>
-    <string-array name="Thursday">
-        <item>19 Кабінет_Німецька</item>
-        <item>39 Кабінет_Художня культура</item>
-        <item>28 Кабінет_Алгебра</item>
-        <item>28 Кабінет_Англійська</item>
-        <item>Спортзал_Фізкультура</item>
-        <item>28 Кабінет_Українська мова</item>
-        <item>28 Кабінет_Виховна</item>
-    </string-array>
-    <string-array name="Friday">
-        <item>28 Кабінет_Фізика</item>
-        <item>18 Кабінет_Геометрія</item>
-        <item>09 Кабінет_Зарубіжна література</item>
-        <item>25 Кабінет_Зарубіжна література</item>
-        <item>35 Кабінет_Правознавство</item>
-        <item>28 Кабінет_Географія</item>
-    </string-array>
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+
+    <string-array name="teachers">
+        <item>Іноземна мова професійного спрямування (англійська)_Щур Наталя Миколаївна</item>
+        <item>item one</item>
+    </string-array>
 </resources>

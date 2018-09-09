@@ -24,9 +24,9 @@ import java.io.InputStreamReader;
 public class DownloadLessonsTask extends AsyncTask<Void, Void, JSONArray>
 {
 	Context context;
-	boolean ok;
+	private boolean ok;
 
-	public DownloadLessonsTask(Context context)
+	DownloadLessonsTask(Context context)
 	{
 		super();
 		this.context = context;
@@ -34,11 +34,11 @@ public class DownloadLessonsTask extends AsyncTask<Void, Void, JSONArray>
 
 	protected JSONArray doInBackground(Void... v)
 	{
-		TableGetter.init();
+		TableGetter.init(context);
 
 		StringBuilder builder = new StringBuilder();
 		HttpClient client = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet("http://yrambler2001.narod.ru/yrambler2001/LessonsPlus/Lessons.json");
+		HttpGet httpGet = new HttpGet("http://yrambler2001.narod.ru/yrambler2001/LessonsPlus/teachers.json");
 		try
 		{
 			HttpResponse response = client.execute(httpGet);
@@ -52,7 +52,7 @@ public class DownloadLessonsTask extends AsyncTask<Void, Void, JSONArray>
 				String line;
 				while ((line = reader.readLine()) != null) {builder.append(line);}
 			} else {ok = false;}
-			FileWriter fw = new FileWriter(new File(context.getFilesDir(), "lessons"));
+			FileWriter fw = new FileWriter(new File(context.getFilesDir(), "teachers"));
 			fw.write(builder.toString());
 			fw.close();
 			this.ok = true;
@@ -71,6 +71,7 @@ public class DownloadLessonsTask extends AsyncTask<Void, Void, JSONArray>
 		{
 			MainActivity.show(context, "Оновлено");
 			MainActivity.ja = downloaded;
+			Teachers.update();
 		} else
 		{MainActivity.show(context, "Помилка оновлення");}
 	}

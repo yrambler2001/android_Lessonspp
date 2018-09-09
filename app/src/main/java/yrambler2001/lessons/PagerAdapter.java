@@ -9,23 +9,23 @@ import android.support.v13.app.FragmentPagerAdapter;
  */
 
 public class PagerAdapter extends FragmentPagerAdapter {
-    private static int NUM_ITEMS = 8;
 
-    public PagerAdapter(FragmentManager fragmentManager) {
+    PagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
     }
 
     // Returns total number of pages
     @Override
     public int getCount() {
-        return NUM_ITEMS;
+        return 9;
     }
 
     // Returns the fragment to display for that page
     @Override
     public Fragment getItem(int position) {
-        return (position==0)?Teachers.newInstance():DayFragment.newInstance(position);
-
+        if (position == 0) return Teachers.newInstance();
+        if (position == 8) return Settings.newInstance();
+        return DayFragment.newInstance(position);
     }
 
     // Returns the page title for the top indicator

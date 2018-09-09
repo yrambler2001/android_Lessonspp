@@ -11,10 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.astuetz.PagerSlidingTabStrip;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -22,7 +19,6 @@ import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +34,15 @@ public class DayFragment extends Fragment {
     private int viewDay;
     ListView listLesson;
     UIUpdater uiu;
-    //ProgressBar time;
-    TextView lesson;//, //length;
+    TextView lesson;
     Drawable drLesson, drBreak;
-
+    int hashcodes[] = new int[]{0, 0, 0, 0, 0};
     List<String> lLnB = new ArrayList<>();
 
 
-    int special = 0;
+    static int updown = 0;
+    static String debugText1 = "";
+    //static int group = 1; //1 or 2
     Interval[] LnB;
     DateTimeFormatter fmt = DateTimeFormat.forPattern("HH:mm");
 
@@ -59,14 +56,18 @@ public class DayFragment extends Fragment {
 
     public void updateLnB() {
         if (MainActivity.firstGroup.size() > 0) {
-            List<Map<String, String>> l = MainActivity.firstGroup.get(0);
-            for (int i = 0; i < l.size(); i++) {
-                for (String a : l.get(i).get("lesson").split("-"))
-                    if (!lLnB.contains(a)) lLnB.add(a);
-            }
-            LnB = new Interval[lLnB.size()];
-            for (int i = 1; i < lLnB.size(); i++) {
-                LnB[i - 1] = new Interval(new LocalTime(lLnB.get(i - 1)).toDateTimeToday().withDayOfWeek(viewDay), new LocalTime(lLnB.get(i)).toDateTimeToday().withDayOfWeek(viewDay));
+            int hc = MainActivity.firstGroup.hashCode();
+            if (hashcodes[0] != hc) {
+                hashcodes[0]=hc;
+                List<Map<String, String>> l = MainActivity.firstGroup.get(0);
+                for (int i = 0; i < l.size(); i++) {
+                    for (String a : l.get(i).get("lesson").split("-"))
+                        if (!lLnB.contains(a)) lLnB.add(a);
+                }
+                LnB = new Interval[lLnB.size()];
+                for (int i = 1; i < lLnB.size(); i++) {
+                    LnB[i - 1] = new Interval(new LocalTime(lLnB.get(i - 1)).toDateTimeToday().withDayOfWeek(viewDay), new LocalTime(lLnB.get(i)).toDateTimeToday().withDayOfWeek(viewDay));
+                }
             }
         }
     }
@@ -83,12 +84,10 @@ public class DayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dayfragment, container, false);
-        listLesson = (ListView) view.findViewById(R.id.lv_lesson);
+        listLesson = view.findViewById(R.id.lv_lesson);
         drLesson = getResources().getDrawable(R.drawable.dr_lesson);
         drBreak = getResources().getDrawable(R.drawable.dr_break);
-        //time = (ProgressBar) view.findViewById(R.id.pb_time);
-        lesson = (TextView) view.findViewById(R.id.tv_lesson);
-        //length = (TextView) view.findViewById(R.id.tv_length);
+        lesson = view.findViewById(R.id.tv_lesson);
         lesson.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "simpleiriska.ttf"));
 
 
@@ -100,73 +99,64 @@ public class DayFragment extends Fragment {
                     @Override
                     public void run() {
                         DateTime now = new DateTime(DateTimeZone.forTimeZone(TimeZone.getDefault()));
-                        //time.setProgressDrawable(drLesson);
 
-                        //try {
-                        //JSONArray thisDay = MainActivity.ja.getJSONArray(viewDay - 1);
                         updateLnB();
-                        if (MainActivity.firstGroup.size()>0){
-                        List lThisDay = MainActivity.firstGroup.get(Math.min(5, viewDay));
+                        List<List<Map<String, String>>> lst = (MainActivity.group == 1) ? MainActivity.firstGroup : MainActivity.secondGroup;
+                        if ((lst.size() > 0)) {
+                            List<Map<String, String>> lThisDay;
+                            if (viewDay <= (lst.size() - 1)) {
+                                lThisDay = lst.get(Math.min(lst.size() - 1, viewDay));
 
-                        adapter.update(lThisDay);
-                        adapter.setNow(0);
+                                adapter.update(lThisDay);
+                            } else lThisDay = new ArrayList<>();
 
-                        adapter.setSpecial((now.getWeekOfWeekyear() & 1) == 1);
 
-                        if (viewDay > 5) {
-                            lesson.setText("Пар не було");
-                            //time.setMax(0);
-                            //time.setProgress(0);
-                        } else if (now.isAfter(LnB[(lThisDay.size() / 2 - 1) * 2].getEnd())) {
-                            //else if ((now.isAfter(LnB[LnB.length - 1].getEnd()))) {
-                            lesson.setText("Пари закінчились");
-                            //time.setProgress(thisDay.length());
-                            //time.setMax(thisDay.length());
-                            adapter.setProgress((lThisDay.size() / 2) * 4000);
-                        } else if (now.isBefore(LnB[0].getStart())) {
-                            lesson.setText("Пари ще не почались");
-                            //time.setMax(thisDay.length());
-                            //time.setProgress(0);
-                            adapter.setProgress(0);
-                        } else
-                            for (int i = 0; i < LnB.length-1; i++) {
-                            if (LnB[i]==null)
-                            {
-                                Log.i("FF","FF");
-                            }
-                                if (LnB[i].contains(now)) {
-                                    adapter.setCountdown((int) ((LnB[i].getEndMillis() - now.getMillis()) / 60000));
-                                    //Log.i("ms", (int)((LnB[i].getEndMillis()-now.getMillis())/60000)+"");
-                                    if ((i & 1) == 0) {
-                                        lesson.setText("Пара " + ((i + 2) / 2));
-                                        adapter.setNow((i + 2) / 2);
-                                        int m = (int) (LnB[i].toDurationMillis() / 1000);
-                                        int n = ((int) (now.getMillis() - LnB[i].getStartMillis()) / 1000);
-                                        adapter.setProgress((((i + 2) / 2) - 1) * 4000 + (n * 4000 / m));
-                                        adapter.setBreak(false);
-                                    } else {
-                                        //time.setProgressDrawable(drBreak);
-                                        lesson.setText("Перерва " + ((i + 1) / 2));
-                                        int m = (int) (LnB[i].toDurationMillis() / 1000);
-                                        int n = ((int) (now.getMillis() - LnB[i].getStartMillis()) / 1000);
-                                        adapter.setProgress((((i + 2) / 2)) * 4000 + (n * 4000 / m));
-                                        adapter.setBreak(true);
+                            adapter.setNow(0);
+
+                            //adapter.setUpdown((now.getWeekOfWeekyear() & 1) == 1);
+                            adapter.setUpdown(updown);
+                            if (viewDay > 5) {
+                                lesson.setText("Пар не було");
+
+                            } else if (now.isAfter(LnB[(lThisDay.size() / 2 - 1) * 2].getEnd())) {
+                                lesson.setText("Пари закінчились");
+
+                                adapter.setProgress((lThisDay.size() / 2) * 4000);
+                            } else if (now.isBefore(LnB[0].getStart())) {
+                                lesson.setText("Пари ще не почались");
+                                adapter.setProgress(0);
+                            } else
+                                for (int i = 0; i < LnB.length - 1; i++) {
+                                    if (LnB[i] == null) {
+                                        Log.i("FF", "FF");
                                     }
-                                    lesson.append(" " + fmt.print(LnB[i].getStart()) + "-" + fmt.print(LnB[i].getEnd()) + " " + LnB[i].toDurationMillis() / 60000 + "хв");
-                                    //time.setMax((int) (LnB[i].toDurationMillis() / 1000));
-                                    //time.setProgress((int) ((now.getMillis() - LnB[i].getStartMillis()) / 1000));
-                                    //length.setText((now.getMillis() - LnB[i].getStartMillis()) / 60000 + " з " + LnB[i].toDurationMillis() / 60000 + "хв");
+                                    if (LnB[i].contains(now)) {
+                                        adapter.setCountdown((int) ((LnB[i].getEndMillis() - now.getMillis()) / 60000));
+                                        if ((i & 1) == 0) {
+                                            lesson.setText("Пара " + ((i + 2) / 2));
+                                            adapter.setNow((i + 2) / 2);
+                                            int m = (int) (LnB[i].toDurationMillis() / 1000);
+                                            int n = ((int) (now.getMillis() - LnB[i].getStartMillis()) / 1000);
+                                            adapter.setProgress((((i + 2) / 2) - 1) * 4000 + (n * 4000 / m));
+                                            adapter.setBreak(false);
+                                        } else {
+                                            lesson.setText("Перерва " + ((i + 1) / 2));
+                                            int m = (int) (LnB[i].toDurationMillis() / 1000);
+                                            int n = ((int) (now.getMillis() - LnB[i].getStartMillis()) / 1000);
+                                            adapter.setProgress((((i + 2) / 2)) * 4000 + (n * 4000 / m));
+                                            adapter.setBreak(true);
+                                        }
+                                        lesson.append(" " + fmt.print(LnB[i].getStart()) + "-" + fmt.print(LnB[i].getEnd()) + " " + LnB[i].toDurationMillis() / 60000 + "хв");
+                                    }
                                 }
-                            }
-                        //if (time.getMax() <= thisDay.length())
-                        //length.setText(time.getProgress() + " з " + time.getMax());
-                        lesson.setText(lesson.getText().toString().replace('і', 'i'));
-                        adapter.notifyDataSetChanged();
-                        //} catch (Exception e) {
-                        //    e.printStackTrace();
-                        //}
+                            lesson.setText(lesson.getText().toString().replace('і', 'i'));
+                            adapter.notifyDataSetChanged();
+                            //} catch (Exception e) {
+                            //    e.printStackTrace();
+                            //}
+                        }
                     }
-                }});
+                });
         uiu.startUpdates();
         return view;
     }
