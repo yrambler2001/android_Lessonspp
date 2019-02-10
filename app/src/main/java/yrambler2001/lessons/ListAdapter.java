@@ -123,9 +123,9 @@ public class ListAdapter extends BaseAdapter {
             text2.setText(hm.get("type"));
             text3.setText(hm.get("cabinet"));
             text4.setText(MainActivity.firstGroup.get(0).get(position*2).get("lesson"));
-            if (text2.getText()=="--"){text2.setVisibility(View.GONE);}
-            if (text3.getText()=="--"){text3.setVisibility(View.GONE);}
-            if (text1.getText()=="--"){text1.setVisibility(View.GONE);}
+            if (text2.getText()=="--"){text2.setVisibility(View.GONE);} else text2.setVisibility(View.VISIBLE);
+            if (text3.getText()=="--"){text3.setVisibility(View.GONE);} else text3.setVisibility(View.VISIBLE);
+            if (text1.getText()=="--"){text1.setVisibility(View.GONE);} else text1.setVisibility(View.VISIBLE);
 
         } catch (Exception e) {
             e.printStackTrace();
