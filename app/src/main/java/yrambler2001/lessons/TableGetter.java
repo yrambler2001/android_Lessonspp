@@ -23,7 +23,7 @@ class TableGetter {
     static void init(Context context) {
         try {
             Document doc;
-            String url = "http://tntu.edu.ua/?p=uk/schedule&s=fis-sp11";
+            String url = "http://tntu.edu.ua/?p=uk/schedule&s=fis-sp21";
 
             doc = Jsoup.connect(url).get();
             FileWriter fw = new FileWriter(new File(context.getFilesDir(), "lessons_tntu"));
@@ -43,7 +43,7 @@ class TableGetter {
         Element script = doc.getElementById("ScheduleWeek")
                 .getElementsByTag("table").last();
         DayFragment.updown = doc.getElementsByTag("h3").select(".Black").text().contains("перший") ? 0 : 1;
-        DayFragment.debugText1="Насправді "+((DayFragment.updown==0)?"перший":"другий")+" тиждень";
+        DayFragment.debugText1="Насправді "+((DayFragment.updown==0)?"перший":"другий")+" тиждень\n\n\n\t App by Yuriy Synyshyn";
         script.getElementsByTag("tbody");
         Elements linesInTable = script.getElementsByTag("table").first().getElementsByTag("tr");
         //String[] sHeader = new String[20];
