@@ -8,7 +8,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 7
-        versionName '6.0.1 by yrambler2001'
+        versionName '6.0.2 by yrambler2001'
     }
     buildTypes {
         release {
