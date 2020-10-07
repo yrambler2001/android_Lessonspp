@@ -23,7 +23,7 @@ class TableGetter {
     static void init(Context context) {
         try {
             Document doc;
-            String url = "http://tntu.edu.ua/?p=uk/schedule&s=fis-sp21";
+            String url = "http://tntu.edu.ua/?p=uk/schedule&s=fis-sp31";
 
             doc = Jsoup.connect(url).get();
             FileWriter fw = new FileWriter(new File(context.getFilesDir(), "lessons_tntu"));
